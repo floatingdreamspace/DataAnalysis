@@ -1,10 +1,15 @@
 import sqlite3
 import streamlit
 import requests
+import json
 
 page_title = "Collecting Dex Data"
 page_icon = ":seedling:"
 layout = "centered"
+
+# Connecting to the database
+connection = sqlite3.connect("DB.db")
+cursor = connection.cursor()
 
 streamlit.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
 
@@ -22,5 +27,25 @@ with streamlit.form("input_form"):
             "https://api.dexscreener.com/latest/dex/pairs/solana/" + pairId,
             headers={},
         )
-        data = response.json()
+        data = json.loads(response.json())
         streamlit.subheader(data)
+
+with streamlit.form("input_form"):
+    resultPair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="resultPairId")
+    result = streamlit.radio(
+        "Select coin result:",
+        [":Success", ":Failure"],
+        captions=[
+            "Success",
+            "Failure",
+        ],
+        horizontal=True,
+    )
+
+    submittedb = streamlit.form_submit_button("Submit Form")
+
+    if submittedb:
+        if result == ":Success":
+            streamlit.subheader("Success")
+
+connection.close()
