@@ -30,7 +30,7 @@ with streamlit.form("input_form"):
         data = json.loads(response.json())
         streamlit.subheader(data)
 
-with streamlit.form("input_form"):
+with streamlit.form("result_form"):
     resultPair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="resultPairId")
     result = streamlit.radio(
         "Select coin result:",
