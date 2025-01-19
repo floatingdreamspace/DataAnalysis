@@ -1,8 +1,6 @@
 import subprocess
 import sqlite3
 import streamlit
-
-subprocess.check_call(["pip", "install", "requests"])
 import requests
 
 page_title = "Collecting Dex Data"
@@ -16,8 +14,7 @@ streamlit.subheader(f"Tell us about your garden! Please enter your information b
                     " along with local weather data to predict how much water you should be giving your garden " +
                     "using machine learning!")
 with streamlit.form("input_form"):
-    col1 = streamlit.columns(1)
-    col1.text_input("Enter your Dexscreener Pair ID: ", key="pairId")
+    pair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="pairId")
     submitted = streamlit.form_submit_button("Submit Form")
 
 if submitted:
