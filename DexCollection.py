@@ -16,11 +16,11 @@ with streamlit.form("input_form"):
     pair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="pairId")
     submitted = streamlit.form_submit_button("Submit Form")
 
-if submitted:
-    pairId = "GNfZPYyhxmvEracmrKJ87HBJy4VPMf1h5ojDPitRqeqv"
-    response = requests.get(
-        "https://api.dexscreener.com/latest/dex/pairs/solana/" + pairId,
-        headers={},
-    )
-    data = response.json()
-    print(data)
+    if submitted:
+        pairId = str(streamlit.session_state["pairId"])
+        response = requests.get(
+            "https://api.dexscreener.com/latest/dex/pairs/solana/" + pairId,
+            headers={},
+        )
+        data = response.json()
+        streamlit.subheader(data)
