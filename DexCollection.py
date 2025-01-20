@@ -1,7 +1,7 @@
 import sqlite3
 import streamlit
 import requests
-import json
+import datetime
 
 page_title = "Collecting Dex Data"
 page_icon = ":seedling:"
@@ -17,7 +17,7 @@ streamlit.header(f"Welcome to SproutCast! Your Gardening Companion")
 streamlit.subheader(f"Tell us about your garden! Please enter your information below. SproutCast will use your inputs" +
                     " along with local weather data to predict how much water you should be giving your garden " +
                     "using machine learning!")
-with streamlit.form("input_form"):
+with (((streamlit.form("input_form")))):
     pair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="pairId")
     submitted = streamlit.form_submit_button("Submit Form")
 
@@ -70,6 +70,17 @@ with streamlit.form("input_form"):
                 boosts = data["pairs"][0]["boosts"]["active"]
             else: boosts = 0
 
+            now = datetime.datetime.now()
+            current_minutes = now.hour * 60 + now.minute
+            dayOfWeek = now.weekday()
+
+            command = ("INSERT INTO tokens VALUES('" + str(pairAddress) + "', '" + str(tokenAddress) + "', '" + str(buysM5) +
+                                    str(buysH1) + "', '" + str(sellsM5) + "', '" + str(sellsH1) + "', '" + str(volM5) + "', '" + str(volH1) + "', '" +
+                                    str(priceM5) + "', '" + str(priceH1) + "', '" + str(liquidity) + "', '" + str(marketCap) + "', '" +
+                                    str(paidProfile) + "', '" + str(paidAd) + "', '" + str(websites) + "', '" + str(socials) + "', '" + str(boosts) +
+                                    str(dayOfWeek) + "', '" + str(current_minutes) + "', 'default')")
+            cursor.execute(command)
+            connection.commit()
             streamlit.subheader("Pair Address: " + str(pairAddress) +
                                 "\nToken Address: " + str(tokenAddress) +
                                 "\nBuys 5m: " + str(buysM5) +
