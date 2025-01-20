@@ -28,7 +28,7 @@ with streamlit.form("input_form"):
             headers={},
         )
         data = response.json()
-        streamlit.subheader(data["pairs"]["liquidity"][0])
+        streamlit.subheader(data["pairs"][9][0])
 
 with streamlit.form("result_form"):
     resultPair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="resultPairId")
