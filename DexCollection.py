@@ -79,6 +79,7 @@ with (((streamlit.form("input_form")))):
                                     str(priceM5) + "', '" + str(priceH1) + "', '" + str(liquidity) + "', '" + str(marketCap) + "', '" +
                                     str(paidProfile) + "', '" + str(paidAd) + "', '" + str(websites) + "', '" + str(socials) + "', '" + str(boosts) +
                                     str(dayOfWeek) + "', '" + str(current_minutes) + "', 'default')")
+            streamlit.header(command)
             cursor.execute(command)
             connection.commit()
             streamlit.subheader("Pair Address: " + str(pairAddress) +
