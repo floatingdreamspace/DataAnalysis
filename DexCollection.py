@@ -27,8 +27,9 @@ with streamlit.form("input_form"):
             "https://api.dexscreener.com/latest/dex/pairs/solana/" + pairId,
             headers={},
         )
-        data = json.loads(response.json())
-        streamlit.subheader(data)
+        data = response.json()
+        dataDict = json.loads(data)
+        streamlit.subheader(dataDict)
 
 with streamlit.form("result_form"):
     resultPair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="resultPairId")
