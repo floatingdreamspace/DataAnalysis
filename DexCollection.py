@@ -70,23 +70,23 @@ with streamlit.form("input_form"):
                 boosts = data["pairs"][0]["boosts"]["active"]
             else: boosts = 0
 
-            streamlit.subheader("Pair Address: " + pairAddress +
-                                "\nToken Address: " + tokenAddress +
-                                "\nBuys 5m: " + buysM5 +
-                                "\nBuys 1h: " + buysH1 +
-                                "\nSells 5m: " + sellsM5 +
-                                "\nSells 1h: " + sellsH1 +
-                                "\nVolume 5m: " + volM5 +
-                                "\nVolume 1h: " + volH1 +
-                                "\nPrice 5m: " + priceM5 +
-                                "\nPrice 1h: " + priceH1 +
-                                "\nLiquidity: $" + liquidity +
-                                "\nMarket Cap: $" + marketCap +
-                                "\nPaid Profile: " + paidProfile +
-                                "\nPaid Ad: " + paidAd +
-                                "\nWebsites: " + websites +
-                                "\nSocials: " + socials +
-                                "\nBoosted: " + boosts)
+            streamlit.subheader("Pair Address: " + str(pairAddress) +
+                                "\nToken Address: " + str(tokenAddress) +
+                                "\nBuys 5m: " + str(buysM5) +
+                                "\nBuys 1h: " + str(buysH1) +
+                                "\nSells 5m: " + str(sellsM5) +
+                                "\nSells 1h: " + str(sellsH1) +
+                                "\nVolume 5m: " + str(volM5) +
+                                "\nVolume 1h: " + str(volH1) +
+                                "\nPrice 5m: " + str(priceM5) +
+                                "\nPrice 1h: " + str(priceH1) +
+                                "\nLiquidity: $" + str(liquidity) +
+                                "\nMarket Cap: $" + str(marketCap) +
+                                "\nPaid Profile: " + str(paidProfile) +
+                                "\nPaid Ad: " + str(paidAd) +
+                                "\nWebsites: " + str(websites) +
+                                "\nSocials: " + str(socials) +
+                                "\nBoosted: " + str(boosts))
 
 with streamlit.form("result_form"):
     resultPair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="resultPairId")
