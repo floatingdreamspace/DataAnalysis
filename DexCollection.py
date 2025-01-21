@@ -2,6 +2,7 @@ import sqlite3
 import streamlit
 import requests
 import datetime
+import pytz
 
 page_title = "Collecting Dex Data"
 page_icon = ":seedling:"
@@ -70,7 +71,8 @@ with (((streamlit.form("input_form")))):
                 boosts = data["pairs"][0]["boosts"]["active"]
             else: boosts = 0
 
-            now = datetime.datetime.now()
+            timezone = pytz.timezone("America/New_York")
+            now = datetime.datetime.now(timezone)
             streamlit.subheader(now)
             streamlit.subheader(now.hour * 60)
             streamlit.subheader(now.minute)
