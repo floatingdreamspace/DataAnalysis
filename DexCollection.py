@@ -3,6 +3,7 @@ import streamlit
 import requests
 import datetime
 import pytz
+import csv
 
 page_title = "Collecting Dex Data"
 page_icon = ":seedling:"
@@ -81,30 +82,18 @@ with (streamlit.form("input_form")):
                                     str(priceM5) + "', '" + str(priceH1) + "', '" + str(liquidity) + "', '" + str(marketCap) + "', '" +
                                     str(paidProfile) + "', '" + str(paidAd) + "', '" + str(websites) + "', '" + str(socials) + "', '" + str(boosts) + "', '" +
                                     str(dayOfWeek) + "', '" + str(current_minutes) + "', 'default')")
-            #streamlit.header(command)
             cursor.execute(command)
             connection.commit()
+            with open('tokens.csv', 'w', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=',')
+                writer.writerow([str(pairAddress), str(tokenAddress), str(buysM5), str(buysH1), str(sellsM5), str(sellsH1),
+                                 str(volM5), str(volH1), str(paidProfile), str(paidAd), str(websites), str(socials), str(boosts),
+                                 str(dayOfWeek), str(current_minutes), "default"])
             cursor.execute("SELECT * FROM tokens")
             tokens = cursor.fetchall()
             for row in tokens:
-                streamlit.subheader(row[0])
-            #streamlit.subheader("Pair Address: " + str(pairAddress) +
-            #                    "\nToken Address: " + str(tokenAddress) +
-            #                    "\nBuys 5m: " + str(buysM5) +
-            #                    "\nBuys 1h: " + str(buysH1) +
-            #                    "\nSells 5m: " + str(sellsM5) +
-             #                   "\nSells 1h: " + str(sellsH1) +
-            #                    "\nVolume 5m: " + str(volM5) +
-            #                    "\nVolume 1h: " + str(volH1) +
-            #                    "\nPrice 5m: " + str(priceM5) +
-            #                    "\nPrice 1h: " + str(priceH1) +
-            #                    "\nLiquidity: $" + str(liquidity) +
-            #                    "\nMarket Cap: $" + str(marketCap) +
-            #                    "\nPaid Profile: " + str(paidProfile) +
-            #                    "\nPaid Ad: " + str(paidAd) +
-            #                    "\nWebsites: " + str(websites) +
-            #                    "\nSocials: " + str(socials) +
-            #                    "\nBoosted: " + str(boosts))
+                if row[19] == "default":
+                    streamlit.subheader(row[0])
 
 with streamlit.form("result_form"):
     resultPair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="resultPairId")
