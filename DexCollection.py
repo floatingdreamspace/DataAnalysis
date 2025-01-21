@@ -18,7 +18,7 @@ streamlit.header(f"Welcome to SproutCast! Your Gardening Companion")
 streamlit.subheader(f"Tell us about your garden! Please enter your information below. SproutCast will use your inputs" +
                     " along with local weather data to predict how much water you should be giving your garden " +
                     "using machine learning!")
-with (((streamlit.form("input_form")))):
+with (streamlit.form("input_form")):
     pair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="pairId")
     submitted = streamlit.form_submit_button("Submit Form")
 
@@ -84,26 +84,29 @@ with (((streamlit.form("input_form")))):
                                     str(priceM5) + "', '" + str(priceH1) + "', '" + str(liquidity) + "', '" + str(marketCap) + "', '" +
                                     str(paidProfile) + "', '" + str(paidAd) + "', '" + str(websites) + "', '" + str(socials) + "', '" + str(boosts) + "', '" +
                                     str(dayOfWeek) + "', '" + str(current_minutes) + "', 'default')")
-            streamlit.header(command)
+            #streamlit.header(command)
             cursor.execute(command)
             connection.commit()
-            streamlit.subheader("Pair Address: " + str(pairAddress) +
-                                "\nToken Address: " + str(tokenAddress) +
-                                "\nBuys 5m: " + str(buysM5) +
-                                "\nBuys 1h: " + str(buysH1) +
-                                "\nSells 5m: " + str(sellsM5) +
-                                "\nSells 1h: " + str(sellsH1) +
-                                "\nVolume 5m: " + str(volM5) +
-                                "\nVolume 1h: " + str(volH1) +
-                                "\nPrice 5m: " + str(priceM5) +
-                                "\nPrice 1h: " + str(priceH1) +
-                                "\nLiquidity: $" + str(liquidity) +
-                                "\nMarket Cap: $" + str(marketCap) +
-                                "\nPaid Profile: " + str(paidProfile) +
-                                "\nPaid Ad: " + str(paidAd) +
-                                "\nWebsites: " + str(websites) +
-                                "\nSocials: " + str(socials) +
-                                "\nBoosted: " + str(boosts))
+            cursor.execute("SELECT * FROM tokens")
+            tokens = cursor.fetchall()
+            streamlit.subheader(tokens)
+            #streamlit.subheader("Pair Address: " + str(pairAddress) +
+            #                    "\nToken Address: " + str(tokenAddress) +
+            #                    "\nBuys 5m: " + str(buysM5) +
+            #                    "\nBuys 1h: " + str(buysH1) +
+            #                    "\nSells 5m: " + str(sellsM5) +
+             #                   "\nSells 1h: " + str(sellsH1) +
+            #                    "\nVolume 5m: " + str(volM5) +
+            #                    "\nVolume 1h: " + str(volH1) +
+            #                    "\nPrice 5m: " + str(priceM5) +
+            #                    "\nPrice 1h: " + str(priceH1) +
+            #                    "\nLiquidity: $" + str(liquidity) +
+            #                    "\nMarket Cap: $" + str(marketCap) +
+            #                    "\nPaid Profile: " + str(paidProfile) +
+            #                    "\nPaid Ad: " + str(paidAd) +
+            #                    "\nWebsites: " + str(websites) +
+            #                    "\nSocials: " + str(socials) +
+            #                    "\nBoosted: " + str(boosts))
 
 with streamlit.form("result_form"):
     resultPair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="resultPairId")
