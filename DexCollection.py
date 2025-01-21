@@ -82,6 +82,7 @@ with (streamlit.form("input_form")):
                                     str(priceM5) + "', '" + str(priceH1) + "', '" + str(liquidity) + "', '" + str(marketCap) + "', '" +
                                     str(paidProfile) + "', '" + str(paidAd) + "', '" + str(websites) + "', '" + str(socials) + "', '" + str(boosts) + "', '" +
                                     str(dayOfWeek) + "', '" + str(current_minutes) + "', 'default')")
+            streamlit.subheader(command)
             cursor.execute(command)
             connection.commit()
             with open('tokens.csv', 'w', newline='') as csvfile:
@@ -91,9 +92,9 @@ with (streamlit.form("input_form")):
                                  str(dayOfWeek), str(current_minutes), "defaults"])
             cursor.execute("SELECT * FROM tokens")
             tokens = cursor.fetchall()
-            for row in tokens:
-                if row[19] == "default":
-                    streamlit.subheader(row[0])
+            #for row in tokens:
+            #    if row[19] == "default":
+            #        streamlit.subheader(row[0])
 
 with streamlit.form("result_form"):
     resultPair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="resultPairId")
