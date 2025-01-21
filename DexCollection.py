@@ -73,9 +73,6 @@ with (streamlit.form("input_form")):
 
             timezone = pytz.timezone("America/New_York")
             now = datetime.datetime.now(timezone)
-            streamlit.subheader(now)
-            streamlit.subheader(now.hour * 60)
-            streamlit.subheader(now.minute)
             current_minutes = (now.hour * 60) + now.minute
             dayOfWeek = now.weekday()
 
@@ -89,7 +86,8 @@ with (streamlit.form("input_form")):
             connection.commit()
             cursor.execute("SELECT * FROM tokens")
             tokens = cursor.fetchall()
-            streamlit.subheader(tokens)
+            for row in tokens:
+                streamlit.subheader(row[0])
             #streamlit.subheader("Pair Address: " + str(pairAddress) +
             #                    "\nToken Address: " + str(tokenAddress) +
             #                    "\nBuys 5m: " + str(buysM5) +
