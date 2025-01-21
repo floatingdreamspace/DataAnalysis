@@ -71,6 +71,9 @@ with (((streamlit.form("input_form")))):
             else: boosts = 0
 
             now = datetime.datetime.now()
+            streamlit.subheader(now)
+            streamlit.subheader(now.hour * 60)
+            streamlit.subheader(now.minute)
             current_minutes = (now.hour * 60) + now.minute
             dayOfWeek = now.weekday()
 
