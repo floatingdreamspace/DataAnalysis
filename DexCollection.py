@@ -88,7 +88,7 @@ with (streamlit.form("input_form")):
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerow([str(pairAddress), str(tokenAddress), str(buysM5), str(buysH1), str(sellsM5), str(sellsH1),
                                  str(volM5), str(volH1), str(paidProfile), str(paidAd), str(websites), str(socials), str(boosts),
-                                 str(dayOfWeek), str(current_minutes), "default"])
+                                 str(dayOfWeek), str(current_minutes), "defaults"])
             cursor.execute("SELECT * FROM tokens")
             tokens = cursor.fetchall()
             for row in tokens:
