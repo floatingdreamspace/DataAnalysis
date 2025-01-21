@@ -71,7 +71,7 @@ with (((streamlit.form("input_form")))):
             else: boosts = 0
 
             now = datetime.datetime.now()
-            current_minutes = now.hour * 60 + now.minute
+            current_minutes = (now.hour * 60) + now.minute
             dayOfWeek = now.weekday()
 
             command = ("INSERT INTO tokens VALUES('" + str(pairAddress) + "', '" + str(tokenAddress) + "', '" + str(buysM5) + "', '" +
