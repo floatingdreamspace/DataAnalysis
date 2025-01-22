@@ -86,6 +86,7 @@ with ((streamlit.form("input_form"))):
             )
             poolsData = poolsResponse.json()
             pools = len(poolsData)
+            streamlit.subheader("pools: " + str(pools))
 
             command = ("INSERT INTO tokens VALUES('" + str(pairAddress) + "', '" + str(tokenAddress) + "', '" + str(buysM5) + "', '" +
                                     str(buysH1) + "', '" + str(sellsM5) + "', '" + str(sellsH1) + "', '" + str(volM5) + "', '" + str(volH1) + "', '" +
