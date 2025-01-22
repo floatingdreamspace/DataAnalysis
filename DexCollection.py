@@ -65,17 +65,14 @@ with ((streamlit.form("input_form"))):
             boosts = 0
             if "socials" in data["pairs"][0]["info"]:
                 if len(data["pairs"][0]["info"]["socials"]) > 0:
-                    streamlit.subheader("socials")
                     socials = 1
 
             if "websites" in data["pairs"][0]["info"]:
                 if len(data["pairs"][0]["info"]["websites"]) > 0:
-                    streamlit.subheader("websites")
                     websites = 1
 
             if "boosts" in data["pairs"][0]:
                 boosts = data["pairs"][0]["boosts"]["active"]
-                streamlit.subheader("boosted " + str(boosts))
 
             timezone = pytz.timezone("America/New_York")
             now = datetime.datetime.now(timezone)
