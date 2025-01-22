@@ -63,13 +63,14 @@ with ((streamlit.form("input_form"))):
             socials = 0
             websites = 0
             boosts = 0
-            if "socials" in data["pairs"][0]["info"]:
-                if len(data["pairs"][0]["info"]["socials"]) > 0:
-                    socials = 1
 
-            if "websites" in data["pairs"][0]["info"]:
-                if len(data["pairs"][0]["info"]["websites"]) > 0:
-                    websites = 1
+            if "info" in data["pairs"][0]:
+                if "socials" in data["pairs"][0]["info"]:
+                    if len(data["pairs"][0]["info"]["socials"]) > 0:
+                        socials = 1
+                if "websites" in data["pairs"][0]["info"]:
+                    if len(data["pairs"][0]["info"]["websites"]) > 0:
+                        websites = 1
 
             if "boosts" in data["pairs"][0]:
                 boosts = data["pairs"][0]["boosts"]["active"]
@@ -79,11 +80,18 @@ with ((streamlit.form("input_form"))):
             current_minutes = (now.hour * 60) + now.minute
             dayOfWeek = now.weekday()
 
+            poolsResponse = requests.get(
+                "https://api.dexscreener.com/token-pairs/v1/solana/" + tokenAddress,
+                headers={},
+            )
+            poolsData = poolsResponse.json()
+            pools = len(poolsData)
+
             command = ("INSERT INTO tokens VALUES('" + str(pairAddress) + "', '" + str(tokenAddress) + "', '" + str(buysM5) + "', '" +
                                     str(buysH1) + "', '" + str(sellsM5) + "', '" + str(sellsH1) + "', '" + str(volM5) + "', '" + str(volH1) + "', '" +
                                     str(priceM5) + "', '" + str(priceH1) + "', '" + str(liquidity) + "', '" + str(marketCap) + "', '" +
                                     str(paidProfile) + "', '" + str(paidAd) + "', '" + str(websites) + "', '" + str(socials) + "', '" + str(boosts) + "', '" +
-                                    str(dayOfWeek) + "', '" + str(current_minutes) + "', 'default')")
+                                    str(pools) + "', '" + str(dayOfWeek) + "', '" + str(current_minutes) + "', 'default')")
             streamlit.subheader(command)
             cursor.execute(command)
             connection.commit()
@@ -91,7 +99,7 @@ with ((streamlit.form("input_form"))):
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerow([str(pairAddress), str(tokenAddress), str(buysM5), str(buysH1), str(sellsM5), str(sellsH1),
                                  str(volM5), str(volH1), str(paidProfile), str(paidAd), str(websites), str(socials), str(boosts),
-                                 str(dayOfWeek), str(current_minutes), "defaults"])
+                                 str(pools), str(dayOfWeek), str(current_minutes), "defaults"])
             cursor.execute("SELECT * FROM tokens")
             tokens = cursor.fetchall()
             #for row in tokens:
