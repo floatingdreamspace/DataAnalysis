@@ -19,7 +19,7 @@ streamlit.header(f"Welcome to SproutCast! Your Gardening Companion")
 streamlit.subheader(f"Tell us about your garden! Please enter your information below. SproutCast will use your inputs" +
                     " along with local weather data to predict how much water you should be giving your garden " +
                     "using machine learning!")
-with (streamlit.form("input_form")):
+with ((streamlit.form("input_form"))):
     pair = streamlit.text_input("Enter your Dexscreener Pair ID: ", key="pairId")
     submitted = streamlit.form_submit_button("Submit Form")
 
@@ -60,17 +60,22 @@ with (streamlit.form("input_form")):
                 elif item["type"] == "tokenAd" and item["status"] == "approved":
                     paidAd = 1
 
-            if "socials" in data:
-                socials = 1
-            else: socials = 0
+            socials = 0
+            websites = 0
+            boosts = 0
+            if "socials" in data["pairs"][0]["info"]:
+                if len(data["pairs"][0]["info"]["socials"]) > 0:
+                    streamlit.subheader("socials")
+                    socials = 1
 
-            if "websites" in data:
-                websites = 1
-            else: websites = 0
+            if "websites" in data["pairs"][0]["info"]:
+                if len(data["pairs"][0]["info"]["websites"]) > 0:
+                    streamlit.subheader("websites")
+                    websites = 1
 
-            if "boosts" in data:
+            if "boosts" in data["pairs"][0]:
                 boosts = data["pairs"][0]["boosts"]["active"]
-            else: boosts = 0
+                streamlit.subheader("boosted " + str(boosts))
 
             timezone = pytz.timezone("America/New_York")
             now = datetime.datetime.now(timezone)
