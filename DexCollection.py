@@ -107,9 +107,10 @@ with ((streamlit.form("input_form"))):
             MCToBuys = float(marketCap) / float(buysH1)
             poolsToLiquidity = float(pools) / float(liquidity)
             buysToVol = float(buysH1) / float(volH1)
-            tokenInfo = [buysM5, buysH1, sellsM5, sellsH1, volM5, volH1, priceM5, priceH1, liquidity, marketCap, paidProfile,
+            tokenInfo = []
+            tokenInfo.append([buysM5, buysH1, sellsM5, sellsH1, volM5, volH1, priceM5, priceH1, liquidity, marketCap, paidProfile,
                          paidAd, websites, socials, boosts, pools, dayOfWeek, current_minutes, buysToSells, volToLiquidity,
-                         volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol]
+                         volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol])
 
             data_frame = pd.read_csv("university_records.csv")
             data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
@@ -119,8 +120,6 @@ with ((streamlit.form("input_form"))):
             rf = RandomForestClassifier()
             rf.fit(X_train, y_train)
             y_pred = rf.predict(X_test)
-            tokenArray = numpy.array(tokenInfo)
-            tokenArray.reshape(1, -1)
             streamlit.subheader(rf.predict(tokenInfo))
 
 connection.close()
