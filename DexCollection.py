@@ -4,7 +4,8 @@ import requests
 import datetime
 import pytz
 import csv
-import sklearn
+import subprocess
+subprocess.run("python -m pip install scikit-learn")
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
