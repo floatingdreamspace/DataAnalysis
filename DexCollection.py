@@ -4,6 +4,7 @@ import requests
 import datetime
 import pytz
 import csv
+import numpy
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
@@ -118,6 +119,8 @@ with ((streamlit.form("input_form"))):
             rf = RandomForestClassifier()
             rf.fit(X_train, y_train)
             y_pred = rf.predict(X_test)
+            tokenArray = numpy.array(tokenInfo)
+            tokenArray.reshape(1, -1)
             streamlit.subheader(rf.predict(tokenInfo))
 
 connection.close()
