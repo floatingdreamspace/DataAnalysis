@@ -4,7 +4,7 @@ import requests
 import datetime
 import pytz
 import os
-os.system("pip install scikit-learn")
+os.system("pip install sklearn")
 import csv
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
