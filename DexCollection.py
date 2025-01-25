@@ -3,6 +3,8 @@ import streamlit
 import requests
 import datetime
 import pytz
+import os
+os.system("pip install scikit-learn")
 import csv
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
