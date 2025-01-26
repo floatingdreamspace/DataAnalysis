@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
 from sklearn.model_selection import RandomizedSearchCV, train_test_split
+from imblearn.ensemble import BalancedRandomForestClassifier
 
 page_title = "Collecting Dex Data"
 page_icon = ":seedling:"
@@ -117,7 +118,8 @@ with ((streamlit.form("input_form"))):
             X = data_frame.drop('result', axis=1)
             y = data_frame['result']
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-            rf = RandomForestClassifier(n_estimators=10, class_weight='balanced_subsample')
+            #rf = RandomForestClassifier(n_estimators=10, class_weight='balanced_subsample')
+            rf = BalancedRandomForestClassifier(n_estimators=10)
             rf.fit(X_train, y_train)
             y_pred = rf.predict(X_test)
             streamlit.subheader(rf.predict(tokenInfo))
