@@ -127,6 +127,7 @@ with ((streamlit.form("input_form"))):
                 if i == 5:
                     resultStr = resultStr + '\n'
                 resultStr = resultStr + str(rf.predict(tokenInfo))
+                print(resultStr)
             streamlit.subheader(resultStr)
 
 connection.close()
