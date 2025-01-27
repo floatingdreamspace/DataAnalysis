@@ -98,7 +98,6 @@ with ((streamlit.form("input_form"))):
                                     str(priceM5) + "', '" + str(priceH1) + "', '" + str(liquidity) + "', '" + str(marketCap) + "', '" +
                                     str(paidProfile) + "', '" + str(paidAd) + "', '" + str(websites) + "', '" + str(socials) + "', '" + str(boosts) + "', '" +
                                     str(pools) + "', '" + str(dayOfWeek) + "', '" + str(current_minutes) + "', 'default')")
-            streamlit.subheader(command)
 
             buysToSells = float(buysH1) / float(sellsH1)
             volToLiquidity = float(volH1) / float(liquidity)
@@ -113,12 +112,12 @@ with ((streamlit.form("input_form"))):
                          paidAd, websites, socials, boosts, pools, dayOfWeek, current_minutes, buysToSells, volToLiquidity,
                          volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol])
 
-            data_frame = pd.read_csv("university_records.csv")
-            data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
-            X = data_frame.drop('result', axis=1)
-            y = data_frame['result']
             resultStr = ""
             for i in range(0, 9):
+                data_frame = pd.read_csv("university_records.csv")
+                data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
+                X = data_frame.drop('result', axis=1)
+                y = data_frame['result']
                 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
                 rf = RandomForestClassifier(n_estimators=10, class_weight='balanced')
                 #rf = BalancedRandomForestClassifier(n_estimators=10)
@@ -129,5 +128,6 @@ with ((streamlit.form("input_form"))):
                 resultStr = resultStr + str(rf.predict(tokenInfo))
                 print(resultStr)
             streamlit.subheader(resultStr)
+            streamlit.subheader(command)
 
 connection.close()
