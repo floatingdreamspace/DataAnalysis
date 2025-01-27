@@ -113,12 +113,13 @@ with ((streamlit.form("input_form"))):
                          volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol])
 
             resultStr = ""
-            for i in range(0, 9):
+            for i in range(0, 10):
                 data_frame = pd.read_csv("university_records.csv")
                 data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
                 X = data_frame.drop('result', axis=1)
                 y = data_frame['result']
                 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+                streamlit.subheader(y_test)
                 rf = RandomForestClassifier(n_estimators=10, class_weight='balanced')
                 #rf = BalancedRandomForestClassifier(n_estimators=10)
                 rf.fit(X_train, y_train)
