@@ -121,8 +121,8 @@ with ((streamlit.form("input_form"))):
                 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
                 rf = RandomForestClassifier(n_estimators=10, class_weight='balanced_subsample')
                 #rf = BalancedRandomForestClassifier(n_estimators=10)
-                #rf.fit(X_train, y_train)
-                rf.fit(X, y)
+                rf.fit(X_train, y_train)
+                #rf.fit(X, y)
                 if i == 5:
                     resultStr = resultStr + '\n'
                 resultStr = resultStr + str(rf.predict(tokenInfo))
