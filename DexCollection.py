@@ -125,7 +125,7 @@ with ((streamlit.form("input_form"))):
                 scaler = StandardScaler()
                 X_train_regression = scaler.fit_transform(X_train)
                 X_test = scaler.transform(X_test)
-                rmodel = LogisticRegression(LogisticRegression(C=numpy.float64(0.0001), penalty='l1', solver='liblinear'))
+                rmodel = LogisticRegression(LogisticRegression(penalty='l1', C=numpy.float64(0.0001), solver='liblinear'))
                 rmodel.fit(X_train_regression, y_train)
                 y_pred = rmodel.predict(X_test)
                 accuracy = accuracy_score(y_test, y_pred)
