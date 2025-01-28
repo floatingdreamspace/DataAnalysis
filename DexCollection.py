@@ -137,6 +137,19 @@ with ((streamlit.form("input_form"))):
                 regressionr = regressionr + str(rmodel.predict(tokenInfo))
                 resultStr = resultStr + str(rf.predict(tokenInfo))
                 print(resultStr)
+
+                param_grid = [
+                {'penalty':['l1','l2','elasticnet','none'],
+                'C' : np.logspace(-4,4,20),
+                'solver': ['lbfgs','newton-cg','liblinear','sag','saga'],
+                'max_iter'  : [100,1000,2500,5000]}]
+                from sklearn.model_selection import GridSearchCV
+                clf = GridSearchCV(log_model,param_grid = param_grid, cv = 3, verbose=True,n_jobs=-1)
+                clf
+                best_clf = clf.fit(X,y)
+                best_clf.best_estimator_
+                streamlit.subheader("new accuracy: " + str(best_clf.score(X,y)))
+                break
             streamlit.subheader(resultStr)
             streamlit.subheader(regressionr)
             streamlit.subheader(command)
