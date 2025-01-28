@@ -140,7 +140,7 @@ with ((streamlit.form("input_form"))):
 
                 param_grid = [
                 {'penalty':['l1','l2','elasticnet','none'],
-                'C' : np.logspace(-4,4,20),
+                'C' : numpy.logspace(-4,4,20),
                 'solver': ['lbfgs','newton-cg','liblinear','sag','saga'],
                 'max_iter'  : [100,1000,2500,5000]}]
                 from sklearn.model_selection import GridSearchCV
