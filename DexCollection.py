@@ -6,6 +6,8 @@ import pytz
 import csv
 import numpy
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
 from sklearn.model_selection import RandomizedSearchCV, train_test_split
@@ -113,21 +115,30 @@ with ((streamlit.form("input_form"))):
                          volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol])
 
             resultStr = ""
+            regressionr = ""
             for i in range(0, 10):
                 data_frame = pd.read_csv("university_records.csv")
                 data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
                 X = data_frame.drop('result', axis=1)
                 y = data_frame['result']
                 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+                scaler = StandardScaler()
+                X_train_regression = scaler.fit_transform(X_train)
+                X_test = scaler.transform(X_test)
+                rmodel = LogisticRegression()
+                rmodel.fit(X_train_regression, y_train)
+                y_pred = rmodel.predict(X_test)
+                accuracy = accuracy_score(y_test, y_pred)
+                streamlit.subheader("Accuracy: " + str(accuracy * 100))
                 rf = RandomForestClassifier(n_estimators=10, class_weight='balanced_subsample')
                 #rf = BalancedRandomForestClassifier(n_estimators=10)
                 rf.fit(X_train, y_train)
                 #rf.fit(X, y)
-                if i == 5:
-                    resultStr = resultStr + '\n'
+                regressionr = regressionr + str(rmodel.predict(tokenInfo))
                 resultStr = resultStr + str(rf.predict(tokenInfo))
                 print(resultStr)
             streamlit.subheader(resultStr)
+            streamlit.subheader(regressionr)
             streamlit.subheader(command)
 
 connection.close()
