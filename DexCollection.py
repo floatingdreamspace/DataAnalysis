@@ -125,7 +125,7 @@ with ((streamlit.form("input_form"))):
                 scaler = StandardScaler()
                 X_train_regression = scaler.fit_transform(X_train)
                 X_test = scaler.transform(X_test)
-                rmodel = LogisticRegression()
+                rmodel = LogisticRegression(LogisticRegression(C=numpy.float64(0.0001), penalty='l1', solver='liblinear'))
                 rmodel.fit(X_train_regression, y_train)
                 y_pred = rmodel.predict(X_test)
                 accuracy = accuracy_score(y_test, y_pred)
@@ -136,20 +136,6 @@ with ((streamlit.form("input_form"))):
                 #rf.fit(X, y)
                 regressionr = regressionr + str(rmodel.predict(tokenInfo))
                 resultStr = resultStr + str(rf.predict(tokenInfo))
-                print(resultStr)
-
-                param_grid = [
-                {'penalty':['l1','l2','elasticnet','none'],
-                'C' : numpy.logspace(-4,4,20),
-                'solver': ['lbfgs','newton-cg','liblinear','sag','saga'],
-                'max_iter'  : [100,1000,2500,5000]}]
-                from sklearn.model_selection import GridSearchCV
-                clf = GridSearchCV(rmodel,param_grid = param_grid, cv = 3, verbose=True)
-                clf
-                best_clf = clf.fit(X,y)
-                best_clf.best_estimator_
-                streamlit.subheader("new accuracy: " + str(best_clf.score(X,y)))
-                break
             streamlit.subheader(resultStr)
             streamlit.subheader(regressionr)
             streamlit.subheader(command)
