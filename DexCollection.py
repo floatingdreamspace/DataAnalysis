@@ -129,7 +129,7 @@ with ((streamlit.form("input_form"))):
                 rmodel.fit(X_train_regression, y_train)
                 y_pred = rmodel.predict(X_test)
                 accuracy = accuracy_score(y_test, y_pred)
-                streamlit.subheader("Accuracy: " + str(accuracy * 100))
+                #streamlit.subheader("Accuracy: " + str(accuracy * 100))
                 rf = RandomForestClassifier(n_estimators=10, class_weight='balanced_subsample')
                 #rf = BalancedRandomForestClassifier(n_estimators=10)
                 rf.fit(X_train, y_train)
