@@ -144,7 +144,7 @@ with ((streamlit.form("input_form"))):
                 'solver': ['lbfgs','newton-cg','liblinear','sag','saga'],
                 'max_iter'  : [100,1000,2500,5000]}]
                 from sklearn.model_selection import GridSearchCV
-                clf = GridSearchCV(log_model,param_grid = param_grid, cv = 3, verbose=True,n_jobs=-1)
+                clf = GridSearchCV(rmodel,param_grid = param_grid, cv = 3, verbose=True)
                 clf
                 best_clf = clf.fit(X,y)
                 best_clf.best_estimator_
