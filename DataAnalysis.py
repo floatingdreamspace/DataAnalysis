@@ -20,8 +20,9 @@ DBTokens = cursor.fetchall()
 # Populating the array with City objects using data from the database:
 tokens.append(["buysM5", "buysH1", "sellsM5", "sellsH1", "volM5", "volH1", "priceM5", "priceH1", "liquidity", "marketCap",
                  "paidProfile", "paidAd", "websites", "socials", "boosts", "pools", "dayOfWeek", "time", "result", "buysToSells",
-                 "volToLiquidity", "volToMC", "liquidityToMC", "liquidityToBuys", "MCToBuys", "poolsToLiquidity", "buysToVol"])
-'''for row in DBTokens:
+                 "volToLiquidity", "volToMC", "liquidityToMC", "liquidityToBuys", "MCToBuys", "poolsToLiquidity", "buysToVol",
+                 "score", "highHolder", "lowLP", "mutable", "unlockedLP", "singleHolder", "highOwnership"])
+for row in DBTokens:
     buysToSells = float(row[3]) / float(row[5])
     volToLiquidity = float(row[7]) / float(row[10])
     volToMC = float(row[7]) / float(row[11])
@@ -33,11 +34,11 @@ tokens.append(["buysM5", "buysH1", "sellsM5", "sellsH1", "volM5", "volH1", "pric
     tokens.append([row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13]
                         , row[14], row[15], row[16], row[17], row[18], row[19], row[20], buysToSells,
                         volToLiquidity, volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol])
-with open('university_records.csv', 'w', newline='') as csvfile:
+with open('new_data.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerows(tokens)'''
+    writer.writerows(tokens)
 
-data_frame = pd.read_csv("university_records.csv")
+data_frame = pd.read_csv("new_data.csv")
 data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
 X = data_frame.drop('result', axis=1)
 y = data_frame['result']

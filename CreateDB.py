@@ -16,7 +16,8 @@ def create_database(file):
                         (pairAddress TEXT, tokenAddress TEXT, buysM5 INTEGER, buysH1 INTEGER, sellsM5 INTEGER, sellsH1 INTEGER,
                         volM5 REAL, volH1 REAL, priceM5 REAL, priceH1 REAL, liquidity REAL, marketCap REAL, paidProfile INTEGER,
                         paidAd INTEGER, websites INTEGER, socials INTEGER, boosts INTEGER, pools INTEGER, dayOfWeek INTEGER, 
-                        time INTEGER, result TEXT)""")
+                        time INTEGER, result TEXT, score INTEGER, highHolder INTEGER, lowLP INTEGER, mutable INTEGER, 
+                        unlockedLP INTEGER, singleHolder INTEGER, highOwnership INTEGER)""")
     if connection:
         connection.close()
 
