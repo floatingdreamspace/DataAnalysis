@@ -95,11 +95,51 @@ with ((streamlit.form("input_form"))):
             poolsData = poolsResponse.json()
             pools = len(poolsData)
 
-            command = ("INSERT INTO tokens VALUES('" + str(pairAddress) + "', '" + str(tokenAddress) + "', '" + str(buysM5) + "', '" +
-                                    str(buysH1) + "', '" + str(sellsM5) + "', '" + str(sellsH1) + "', '" + str(volM5) + "', '" + str(volH1) + "', '" +
-                                    str(priceM5) + "', '" + str(priceH1) + "', '" + str(liquidity) + "', '" + str(marketCap) + "', '" +
-                                    str(paidProfile) + "', '" + str(paidAd) + "', '" + str(websites) + "', '" + str(socials) + "', '" + str(boosts) + "', '" +
-                                    str(pools) + "', '" + str(dayOfWeek) + "', '" + str(current_minutes) + "', 'default')")
+            rugResponse = requests.get(
+                "https://api.rugcheck.xyz/v1/tokens/" + tokenAddress + "/report/summary",
+                headers={},
+            )
+            rugData = rugResponse.json()
+            print(rugData)
+            highHolder = 0
+            lowLP = 0
+            mutable = 0
+            unlockedLP = 0
+            topTen = 0
+            singleHolder = 0
+            highOwnership = 0
+            if 'risks' in rugData:
+                for item in rugData['risks']:
+                    if item['name'] == "High holder correlation":
+                        highHolder = item['score']
+                    elif item['name'] == "Low amount of LP Providers":
+                        lowLP = item['score']
+                    elif item['name'] == "Mutable metadata":
+                        mutable = item['score']
+                    elif item['name'] == "Large Amount of LP Unlocked":
+                        unlockedLP = item['score']
+                    elif item['name'] == "Top 10 holders high ownership":
+                        topTen = item['score']
+                    elif item['name'] == "Single holder ownership":
+                        singleHolder = item['score']
+                    elif item['name'] == "High ownership":
+                        highOwnership = item['score']
+                    elif item['name'] == "Mutable metadata":
+                        mutable = item['score']
+            score = highHolder + lowLP + mutable + unlockedLP + singleHolder + highOwnership
+
+            command = ("INSERT INTO tokens VALUES('" + str(pairAddress) + "', '" + str(tokenAddress) + "', '" + str(
+                buysM5) + "', '" +
+                       str(buysH1) + "', '" + str(sellsM5) + "', '" + str(sellsH1) + "', '" + str(volM5) + "', '" + str(
+                        volH1) + "', '" +
+                       str(priceM5) + "', '" + str(priceH1) + "', '" + str(liquidity) + "', '" + str(
+                        marketCap) + "', '" +
+                       str(paidProfile) + "', '" + str(paidAd) + "', '" + str(websites) + "', '" + str(
+                        socials) + "', '" + str(boosts) + "', '" +
+                       str(pools) + "', '" + str(dayOfWeek) + "', '" + str(current_minutes) + "', '" + str(
+                        score) + "', '" +
+                       str(highHolder) + "', '" + str(lowLP) + "', '" + str(mutable) + "', '" + str(unlockedLP) +
+                       "', '" + str(singleHolder) + "', '" + str(highOwnership) + "', 'default')")
 
             buysToSells = float(buysH1) / float(sellsH1)
             volToLiquidity = float(volH1) / float(liquidity)
@@ -110,11 +150,13 @@ with ((streamlit.form("input_form"))):
             poolsToLiquidity = float(pools) / float(liquidity)
             buysToVol = float(buysH1) / float(volH1)
             tokenInfo = []
-            tokenInfo.append([buysM5, buysH1, sellsM5, sellsH1, volM5, volH1, priceM5, priceH1, liquidity, marketCap, paidProfile,
-                         paidAd, websites, socials, boosts, pools, dayOfWeek, current_minutes, buysToSells, volToLiquidity,
-                         volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol])
+            tokenInfo.append(
+                [buysM5, buysH1, sellsM5, sellsH1, volM5, volH1, priceM5, priceH1, liquidity, marketCap, paidProfile,
+                 paidAd, websites, socials, boosts, pools, dayOfWeek, current_minutes, buysToSells, volToLiquidity,
+                 volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol, score, highHolder,
+                 lowLP, mutable, unlockedLP, singleHolder, highOwnership])
 
-            resultStr = ""
+            """resultStr = ""
             regressionr = ""
             for i in range(0, 10):
                 data_frame = pd.read_csv("university_records.csv")
@@ -138,7 +180,7 @@ with ((streamlit.form("input_form"))):
                 regressionr = regressionr + str(rmodel.predict(tokenInfo))
                 resultStr = resultStr + str(rf.predict(tokenInfo))
             streamlit.subheader(resultStr)
-            streamlit.subheader(regressionr)
+            streamlit.subheader(regressionr)"""
             streamlit.subheader(command)
 
 connection.close()
