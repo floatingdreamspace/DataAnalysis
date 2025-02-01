@@ -4,7 +4,7 @@ import sqlite3
 connection = sqlite3.connect("DB.db")
 cursor = connection.cursor()
 
-file = open("1_30.txt", "r")
+file = open("1_31.txt", "r")
 data = file.readlines()
 for row in data:
     command = row
