@@ -37,9 +37,9 @@ for row in DBTokens:
                         , row[14], row[15], row[16], row[17], buysToSells,
                         volToLiquidity, volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol,
                         row[20], row[21], row[22], row[23], row[24], row[25], row[26], row[27]])
-with open('new_data.csv', 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile)
-    writer.writerows(tokens)
+#with open('new_data.csv', 'w', newline='') as csvfile:
+#    writer = csv.writer(csvfile)
+#    writer.writerows(tokens)
 
 data_frame = pd.read_csv("new_data.csv")
 data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
@@ -47,8 +47,8 @@ X = data_frame.drop('result', axis=1)
 y = data_frame['result']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 #rf = RandomForestClassifier(n_estimators=100, class_weight='balanced')
-rf = RandomForestClassifier()
-#rf = RandomForestClassifier(class_weight='balanced_subsample', min_samples_split=4, max_features='log2')
+#rf = RandomForestClassifier()
+rf = RandomForestClassifier(class_weight='balanced_subsample', min_samples_split=4, max_features='log2')
 #rf = BalancedRandomForestClassifier(n_estimators=10)
 rf.fit(X_train, y_train)
 y_pred = rf.predict(X_test)
