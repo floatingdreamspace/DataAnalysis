@@ -183,6 +183,6 @@ with ((streamlit.form("input_form"))):
             #streamlit.subheader(regressionr)
             streamlit.subheader(command)
             streamlit.subheader(tokenInfo)
-            streamlit.subheader(X_train[1])
+            streamlit.subheader(X_train.iloc[1])
 
 connection.close()
