@@ -158,7 +158,7 @@ with ((streamlit.form("input_form"))):
 
             resultStr = ""
             regressionr = ""
-            for i in range(0, 10):
+            for i in range(0, 1):
                 data_frame = pd.read_csv("new_data.csv")
                 data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
                 X = data_frame.drop('result', axis=1)
