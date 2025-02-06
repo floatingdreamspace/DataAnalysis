@@ -152,7 +152,7 @@ with ((streamlit.form("input_form"))):
             tokenInfo = []
             tokenInfo.append(
                 [buysM5, buysH1, sellsM5, sellsH1, volM5, volH1, priceM5, priceH1, liquidity, marketCap, paidProfile,
-                 paidAd, websites, socials, boosts, pools, dayOfWeek, current_minutes, buysToSells, volToLiquidity,
+                 paidAd, websites, socials, boosts, pools, buysToSells, volToLiquidity,
                  volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol, score, highHolder,
                  lowLP, mutable, unlockedLP, singleHolder, highOwnership])
 
