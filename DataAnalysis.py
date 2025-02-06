@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
 from sklearn.model_selection import RandomizedSearchCV, train_test_split
 from imblearn.ensemble import BalancedRandomForestClassifier
@@ -9,6 +9,8 @@ import csv
 from Token import Token
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 
 # Connecting to the database
 connection = sqlite3.connect("DB.db")
@@ -47,8 +49,50 @@ X = data_frame.drop('result', axis=1)
 y = data_frame['result']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 #rf = RandomForestClassifier(n_estimators=100, class_weight='balanced')
-#rf = RandomForestClassifier()
-rf = RandomForestClassifier(class_weight='balanced_subsample', min_samples_split=4, max_features='log2')
+#rf = RandomForestClassifier(random_state=42)
+rf = RandomForestClassifier(random_state=42, bootstrap=False, max_depth=80, max_features=2, min_samples_leaf=2, min_samples_split=7, n_estimators=500)
+scaler = StandardScaler()
+X_train_regression = scaler.fit_transform(X_train)
+#X_test = scaler.transform(X_test)
+rmodel = LogisticRegression(penalty='l1', C=np.float64(0.0001), solver='liblinear')
+#rmodel = RandomForestRegressor(random_state=42, bootstrap=True, max_depth=20, max_features='sqrt', min_samples_leaf=2, min_samples_split=2, n_estimators=1200)
+
+# Number of trees in random forest
+n_estimators = [int(x) for x in np.linspace(start = 200, stop = 2000, num = 10)]
+# Number of features to consider at every split
+max_features = ['auto', 'sqrt']
+# Maximum number of levels in tree
+max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
+max_depth.append(None)
+# Minimum number of samples required to split a node
+min_samples_split = [2, 5, 10]
+# Minimum number of samples required at each leaf node
+min_samples_leaf = [1, 2, 4]
+# Method of selecting samples for training each tree
+bootstrap = [True, False]
+# Create the random grid
+random_grid = {'n_estimators': n_estimators,
+               'max_features': max_features,
+               'max_depth': max_depth,
+               'min_samples_split': min_samples_split,
+               'min_samples_leaf': min_samples_leaf,
+               'bootstrap': bootstrap}
+rf_random = RandomizedSearchCV(estimator = rf, param_distributions = random_grid, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
+#rf_random.fit(X_train, y_train)
+#print(rf_random.best_params_)
+param_grid = {
+    'bootstrap': [True],
+    'max_depth': [10, 20, 30, 40],
+    'max_features': [2, 3, 'sqrt'],
+    'min_samples_leaf': [1, 2, 3, 4],
+    'min_samples_split': [1, 2, 4],
+    'n_estimators': [800, 1000, 1200, 1400]
+}
+grid_search = GridSearchCV(estimator = rmodel, param_grid = param_grid,
+                          cv = 3, n_jobs = -1, verbose = 2)
+#grid_search.fit(X_train, y_train)
+#print(grid_search.best_params_)
+
 #rf = BalancedRandomForestClassifier(n_estimators=10)
 rf.fit(X_train, y_train)
 y_pred = rf.predict(X_test)
@@ -56,11 +100,6 @@ accuracy = accuracy_score(y_test, y_pred)
 print(y_test, y_pred)
 print("Accuracy:", accuracy)
 
-scaler = StandardScaler()
-X_train_regression = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
-#rmodel = LogisticRegression(penalty='l1', C=np.float64(0.0001), solver='liblinear')
-rmodel = LogisticRegression()
 rmodel.fit(X_train_regression, y_train)
 y_pred = rmodel.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)

@@ -156,31 +156,31 @@ with ((streamlit.form("input_form"))):
                  volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol, score, highHolder,
                  lowLP, mutable, unlockedLP, singleHolder, highOwnership])
 
-            """resultStr = ""
+            resultStr = ""
             regressionr = ""
             for i in range(0, 10):
-                data_frame = pd.read_csv("university_records.csv")
+                data_frame = pd.read_csv("new_data.csv")
                 data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
                 X = data_frame.drop('result', axis=1)
                 y = data_frame['result']
                 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-                scaler = StandardScaler()
-                X_train_regression = scaler.fit_transform(X_train)
-                X_test = scaler.transform(X_test)
+                #scaler = StandardScaler()
+                #X_train_regression = scaler.fit_transform(X_train)
+                #X_test = scaler.transform(X_test)
                 #rmodel = LogisticRegression(penalty='l1', C=numpy.float64(0.0001), solver='liblinear')
-                rmodel = LogisticRegression()
-                rmodel.fit(X_train_regression, y_train)
-                y_pred = rmodel.predict(X_test)
-                accuracy = accuracy_score(y_test, y_pred)
+                #rmodel = LogisticRegression()
+                #rmodel.fit(X_train_regression, y_train)
+                #y_pred = rmodel.predict(X_test)
+                #accuracy = accuracy_score(y_test, y_pred)
                 #streamlit.subheader("Accuracy: " + str(accuracy * 100))
-                rf = RandomForestClassifier(n_estimators=10, class_weight='balanced_subsample')
+                rf = RandomForestClassifier(random_state=42, bootstrap=False, max_depth=80, max_features=2, min_samples_leaf=2, min_samples_split=7, n_estimators=500)
                 #rf = BalancedRandomForestClassifier(n_estimators=10)
                 rf.fit(X_train, y_train)
                 #rf.fit(X, y)
-                regressionr = regressionr + str(rmodel.predict(tokenInfo))
+                #regressionr = regressionr + str(rmodel.predict(tokenInfo))
                 resultStr = resultStr + str(rf.predict(tokenInfo))
             streamlit.subheader(resultStr)
-            streamlit.subheader(regressionr)"""
+            #streamlit.subheader(regressionr)
             streamlit.subheader(command)
 
 connection.close()
