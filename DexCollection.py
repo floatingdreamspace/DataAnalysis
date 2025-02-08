@@ -179,7 +179,7 @@ with ((streamlit.form("input_form"))):
                 #rf.fit(X, y)
                 #regressionr = regressionr + str(rmodel.predict(tokenInfo))
                 resultStr = resultStr + str(rf.predict(tokenInfo))
-            streamlit.subheader(resultStr)
+            #streamlit.subheader(resultStr)
             #streamlit.subheader(regressionr)
 
             if resultStr == "[1]":
@@ -194,8 +194,8 @@ with ((streamlit.form("input_form"))):
                 X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2, random_state=42)
                 rf2 = RandomForestClassifier(random_state=42)
                 rf2.fit(X_train2, y_train2)
-                resultStr2 = resultStr2 + str(rf2.predict(tokenInfo))
-                streamlit.subheader(resultStr2)
+                resultStr = resultStr + " " + str(rf2.predict(tokenInfo))
+                streamlit.subheader(resultStr)
 
             streamlit.subheader(command)
 
