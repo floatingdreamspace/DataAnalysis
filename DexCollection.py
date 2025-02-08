@@ -193,6 +193,7 @@ with ((streamlit.form("input_form"))):
                 y2 = data_frame2['result']
                 X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2, random_state=42)
                 rf2 = RandomForestClassifier(random_state=42)
+                rf2.fit(X_train2, y_train2)
                 resultStr2 = resultStr2 + str(rf2.predict(tokenInfo))
                 streamlit.subheader(resultStr2)
 
