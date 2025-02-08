@@ -53,8 +53,9 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 rf = RandomForestClassifier(random_state=42, bootstrap=False, max_depth=80, max_features=2, min_samples_leaf=2, min_samples_split=7, n_estimators=500)
 scaler = StandardScaler()
 X_train_regression = scaler.fit_transform(X_train)
-#X_test = scaler.transform(X_test)
-rmodel = LogisticRegression(penalty='l1', C=np.float64(0.0001), solver='liblinear')
+X_test3 = scaler.transform(X_test)
+rmodel = LogisticRegression(penalty='l1', C=np.float64(0.23357214690901212), solver='saga', max_iter=1000)
+#rmodel = LogisticRegression()
 #rmodel = RandomForestRegressor(random_state=42, bootstrap=True, max_depth=20, max_features='sqrt', min_samples_leaf=2, min_samples_split=2, n_estimators=1200)
 
 # Number of trees in random forest
@@ -93,6 +94,16 @@ grid_search = GridSearchCV(estimator = rmodel, param_grid = param_grid,
 #grid_search.fit(X_train, y_train)
 #print(grid_search.best_params_)
 
+param_grid2 = [
+    {'penalty':['l1','l2','elasticnet'],
+    'C' : np.logspace(-4,4,20),
+    'solver': ['lbfgs','newton-cg','liblinear','sag','saga'],
+    'max_iter'  : [100,1000,2500,5000]
+}]
+clf = GridSearchCV(rmodel,param_grid = param_grid2, cv = 3, verbose=True,n_jobs=-1)
+#clf.fit(X_train_regression, y_train)
+#print(clf.best_params_)
+
 #rf = BalancedRandomForestClassifier(n_estimators=10)
 rf.fit(X_train, y_train)
 y_pred = rf.predict(X_test)
@@ -101,7 +112,7 @@ print(y_test, y_pred)
 print("Accuracy:", accuracy)
 
 rmodel.fit(X_train_regression, y_train)
-y_pred = rmodel.predict(X_test)
+y_pred = rmodel.predict(X_test3)
 accuracy = accuracy_score(y_test, y_pred)
 print("Regression Accuracy:", accuracy)
 
