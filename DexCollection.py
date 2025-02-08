@@ -181,6 +181,21 @@ with ((streamlit.form("input_form"))):
                 resultStr = resultStr + str(rf.predict(tokenInfo))
             streamlit.subheader(resultStr)
             #streamlit.subheader(regressionr)
+
+            if resultStr == "[1]":
+                resultStr2 = ""
+                data_frame2 = pd.read_csv("new_data2.csv")
+                data_frame2['result'] = data_frame2['result'].map(
+                    {'Failure': 0, 'Success': 1, 'RSuccess': 11, 'RFailure': -1, '2x': 2
+                        , '3x': 3, '4x': 4, '5x': 5, '6x': 6, '7x': 7
+                        , '8x': 8, '9x': 9, '10x': 10})
+                X2 = data_frame2.drop('result', axis=1)
+                y2 = data_frame2['result']
+                X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2, random_state=42)
+                rf2 = RandomForestClassifier(random_state=42)
+                resultStr2 = resultStr2 + str(rf2.predict(tokenInfo))
+                streamlit.subheader(resultStr2)
+
             streamlit.subheader(command)
 
 connection.close()
