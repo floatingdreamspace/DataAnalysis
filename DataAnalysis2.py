@@ -40,7 +40,7 @@ for row in DBTokens:
                         row[20], row[21], row[22], row[23], row[24], row[25], row[26], row[27]])
 #with open('new_data2.csv', 'w', newline='') as csvfile:
 #    writer = csv.writer(csvfile)
-#   writer.writerows(tokens)
+#    writer.writerows(tokens)
 
 resultStr2 = ""
 data_frame2 = pd.read_csv("new_data2.csv")
