@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
-from sklearn.model_selection import RandomizedSearchCV, train_test_split
+from sklearn.model_selection import RandomizedSearchCV, train_test_split, GridSearchCV
 from imblearn.ensemble import BalancedRandomForestClassifier
 
 # Connecting to the database
@@ -50,8 +50,47 @@ data_frame2['result'] = data_frame2['result'].map({'Failure': 0, 'Success': 1, '
 X2 = data_frame2.drop('result', axis=1)
 y2 = data_frame2['result']
 X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2, random_state=42)
-rf2 = RandomForestClassifier(random_state=42)
+#rf2 = RandomForestClassifier(random_state=42, class_weight='balanced', bootstrap=True, max_depth=40, max_features=3, min_samples_leaf=1, min_samples_split=2, n_estimators=400)
+rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=40, max_features=2, min_samples_leaf=3, min_samples_split=11, n_estimators=700)
 rf2.fit(X_train2, y_train2)
+
+# Number of trees in random forest
+n_estimators = [int(x) for x in numpy.linspace(start = 200, stop = 2000, num = 10)]
+# Number of features to consider at every split
+max_features = ['auto', 'sqrt']
+# Maximum number of levels in tree
+max_depth = [int(x) for x in numpy.linspace(10, 110, num = 11)]
+max_depth.append(None)
+# Minimum number of samples required to split a node
+min_samples_split = [2, 5, 10]
+# Minimum number of samples required at each leaf node
+min_samples_leaf = [1, 2, 4]
+# Method of selecting samples for training each tree
+bootstrap = [True, False]
+# Create the random grid
+random_grid = {'n_estimators': n_estimators,
+               'max_features': max_features,
+               'max_depth': max_depth,
+               'min_samples_split': min_samples_split,
+               'min_samples_leaf': min_samples_leaf,
+               'bootstrap': bootstrap}
+rf_random = RandomizedSearchCV(estimator = rf2, param_distributions = random_grid, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
+#rf_random.fit(X_train2, y_train2)
+#print(rf_random.best_params_)
+
+param_grid = {
+    'bootstrap': [True],
+    'max_depth': [40, 50, 60, 70],
+    'max_features': [2, 3, 'sqrt'],
+    'min_samples_leaf': [3, 4, 5, 6],
+    'min_samples_split': [9, 10, 11],
+    'n_estimators': [700, 800, 900, 1000]
+}
+grid_search = GridSearchCV(estimator = rf2, param_grid = param_grid,
+                          cv = 3, n_jobs = -1, verbose = 2)
+#grid_search.fit(X_train2, y_train2)
+#print(grid_search.best_params_)
+
 y_pred2 = rf2.predict(X_test2)
 accuracy = accuracy_score(y_test2, y_pred2)
 print(y_test2, y_pred2)
