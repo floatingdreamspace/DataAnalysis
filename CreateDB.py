@@ -23,4 +23,4 @@ def create_database(file):
 
 
 if __name__ == '__main__':
-    create_database("DB.db")
+    create_database("DB2.db")

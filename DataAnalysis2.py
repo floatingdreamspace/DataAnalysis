@@ -12,7 +12,7 @@ from sklearn.model_selection import RandomizedSearchCV, train_test_split, GridSe
 from imblearn.ensemble import BalancedRandomForestClassifier
 
 # Connecting to the database
-connection = sqlite3.connect("DB2.db")
+connection = sqlite3.connect("DB.db")
 cursor = connection.cursor()
 
 DBTokens = []  # Array of city data retrieved from the database.
@@ -38,27 +38,27 @@ for row in DBTokens:
                         , row[14], row[15], row[16], row[17], buysToSells,
                         volToLiquidity, volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol,
                         row[20], row[21], row[22], row[23], row[24], row[25], row[26], row[27]])
-#with open('new_data2.csv', 'w', newline='') as csvfile:
+#with open('new_data.csv', 'w', newline='') as csvfile:
 #    writer = csv.writer(csvfile)
 #    writer.writerows(tokens)
 
 resultStr2 = ""
-data_frame2 = pd.read_csv("new_data2.csv")
+data_frame2 = pd.read_csv("new_data.csv")
 data_frame2['result'] = data_frame2['result'].map({'Failure': 0, 'Success': 1, 'RSuccess': 11, 'RFailure': -1, '2x': 2
-                                                 , '3x': 3, '4x': 4, '5x': 5, '6x': 6, '7x': 7
-                                                 , '8x': 8, '9x': 9, '10x': 10})
+                                                 , '3x': 3, '4x': 4, '10x': 10})
 X2 = data_frame2.drop('result', axis=1)
 y2 = data_frame2['result']
-X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2, random_state=42)
+X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
 
 #for clarifying model
-rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features='sqrt', min_samples_leaf=4, min_samples_split=2, n_estimators=300)
+#rf2 = RandomForestClassifier(bootstrap=True, max_depth=20, max_features=15, min_samples_leaf=4, min_samples_split=4, n_estimators=1400)
 
 #for original model
-#rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=10, n_estimators=400)
+rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=10, n_estimators=400)
+#rf2 = RandomForestClassifier(bootstrap=True, max_depth=110, max_features=15, min_samples_leaf=2, min_samples_split=5, n_estimators=300)
 
 #for model tuning
-#rf2 = RandomForestClassifier(random_state=42)
+rf2 = RandomForestClassifier()
 
 rf2.fit(X_train2, y_train2)
 
@@ -88,11 +88,11 @@ rf_random = RandomizedSearchCV(estimator = rf2, param_distributions = random_gri
 
 param_grid = {
     'bootstrap': [True],
-    'max_depth': [10, 20, 40, None],
+    'max_depth': [30, 60, 110, None],
     'max_features': [10, 15, 'sqrt'],
-    'min_samples_leaf': [2, 4, 6, 8],
-    'min_samples_split': [2, 4, 6],
-    'n_estimators': [300, 400, 600, 800]
+    'min_samples_leaf': [1, 2, 4, 6],
+    'min_samples_split': [5, 7, 10],
+    'n_estimators': [300, 400, 500, 600]
 }
 grid_search = GridSearchCV(estimator = rf2, param_grid = param_grid,
                           cv = 3, n_jobs = -1, verbose = 2)
