@@ -12,7 +12,7 @@ from sklearn.model_selection import RandomizedSearchCV, train_test_split, GridSe
 from imblearn.ensemble import BalancedRandomForestClassifier
 
 # Connecting to the database
-connection = sqlite3.connect("DB2.db")
+connection = sqlite3.connect("DB.db")
 cursor = connection.cursor()
 
 DBTokens = []  # Array of city data retrieved from the database.
@@ -38,12 +38,12 @@ for row in DBTokens:
                         , row[14], row[15], row[16], row[17], buysToSells,
                         volToLiquidity, volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol,
                         row[20], row[21], row[22], row[23], row[24], row[25], row[26], row[27]])
-#with open('new_data2.csv', 'w', newline='') as csvfile:
-#    writer = csv.writer(csvfile)
-#    writer.writerows(tokens)
+with open('new_data.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerows(tokens)
 
 resultStr2 = ""
-data_frame2 = pd.read_csv("new_data2.csv")
+data_frame2 = pd.read_csv("new_data.csv")
 data_frame2['result'] = data_frame2['result'].map({'Failure': 0, 'Success': 1, 'RSuccess': 11, 'RFailure': -1, '2x': 2
                                                  , '3x': 3, '4x': 4, '5x': 5, '6x': 6, '7x': 7
                                                  , '8x': 8, '9x': 9, '10x': 10})
