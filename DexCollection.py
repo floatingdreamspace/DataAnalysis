@@ -173,7 +173,7 @@ with ((streamlit.form("input_form"))):
                 #y_pred = rmodel.predict(X_test)
                 #accuracy = accuracy_score(y_test, y_pred)
                 #streamlit.subheader("Accuracy: " + str(accuracy * 100))
-                rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=20, max_features='sqrt', min_samples_leaf=2, min_samples_split=2, n_estimators=1200)
+                rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=10, n_estimators=400)
                 #rf = BalancedRandomForestClassifier(n_estimators=10)
                 rf.fit(X_train, y_train)
                 #rf.fit(X, y)
