@@ -163,7 +163,7 @@ with ((streamlit.form("input_form"))):
                 data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
                 X = data_frame.drop('result', axis=1)
                 y = data_frame['result']
-                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
                 #scaler = StandardScaler()
                 #X_train_regression = scaler.fit_transform(X_train)
                 #X_test = scaler.transform(X_test)
@@ -173,7 +173,9 @@ with ((streamlit.form("input_form"))):
                 #y_pred = rmodel.predict(X_test)
                 #accuracy = accuracy_score(y_test, y_pred)
                 #streamlit.subheader("Accuracy: " + str(accuracy * 100))
-                rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=10, n_estimators=400)
+                #rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=10, n_estimators=400)
+                rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features='sqrt',
+                                             min_samples_leaf=2, min_samples_split=2, n_estimators=600)
                 #rf = BalancedRandomForestClassifier(n_estimators=10)
                 rf.fit(X_train, y_train)
                 #rf.fit(X, y)
@@ -192,7 +194,9 @@ with ((streamlit.form("input_form"))):
                 X2 = data_frame2.drop('result', axis=1)
                 y2 = data_frame2['result']
                 X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
-                rf2 = RandomForestClassifier(bootstrap=True, max_depth=20, max_features=15, min_samples_leaf=4, min_samples_split=4, n_estimators=1400)
+                #rf2 = RandomForestClassifier(bootstrap=True, max_depth=20, max_features=15, min_samples_leaf=4, min_samples_split=4, n_estimators=1400)
+                rf2 = RandomForestClassifier(bootstrap=True, max_depth=90, max_features='sqrt', min_samples_leaf=2,
+                                             min_samples_split=3, n_estimators=400)
                 rf2.fit(X_train2, y_train2)
                 resultStr = resultStr + " " + str(rf2.predict(tokenInfo))
                 streamlit.subheader(resultStr)

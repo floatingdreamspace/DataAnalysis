@@ -1,14 +1,14 @@
 import sqlite3
 
 # Connecting to the database
-connection = sqlite3.connect("DB.db")
+connection = sqlite3.connect("DB2.db")
 cursor = connection.cursor()
 
-file = open("2_20.txt", "r")
+file = open("2_26winners.txt", "r")
 data = file.readlines()
 for row in data:
     command = row
     cursor.execute(command)
     connection.commit()
 
-#connection.close()
+connection.close()

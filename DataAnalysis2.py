@@ -51,14 +51,16 @@ y2 = data_frame2['result']
 X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
 
 #for clarifying model
-#rf2 = RandomForestClassifier(bootstrap=True, max_depth=20, max_features=15, min_samples_leaf=4, min_samples_split=4, n_estimators=1400)
+#rf2 = RandomForestClassifier(bootstrap=True, max_depth=90, max_features='sqrt', min_samples_leaf=2, min_samples_split=3, n_estimators=400)
 
 #for original model
-rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=10, n_estimators=400)
-#rf2 = RandomForestClassifier(bootstrap=True, max_depth=110, max_features=15, min_samples_leaf=2, min_samples_split=5, n_estimators=300)
+#rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=10, n_estimators=400)
+#rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features=10, min_samples_leaf=6, min_samples_split=2, n_estimators=400)
+#rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features='sqrt', min_samples_leaf=1, min_samples_split=5, n_estimators=600)
+rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features='sqrt', min_samples_leaf=2, min_samples_split=2, n_estimators=600)
 
 #for model tuning
-rf2 = RandomForestClassifier()
+#rf2 = RandomForestClassifier(random_state=42)
 
 rf2.fit(X_train2, y_train2)
 
@@ -88,11 +90,11 @@ rf_random = RandomizedSearchCV(estimator = rf2, param_distributions = random_gri
 
 param_grid = {
     'bootstrap': [True],
-    'max_depth': [30, 60, 110, None],
+    'max_depth': [10, 20, 50, None],
     'max_features': [10, 15, 'sqrt'],
     'min_samples_leaf': [1, 2, 4, 6],
-    'min_samples_split': [5, 7, 10],
-    'n_estimators': [300, 400, 500, 600]
+    'min_samples_split': [2, 3, 5],
+    'n_estimators': [400, 500, 600, 300]
 }
 grid_search = GridSearchCV(estimator = rf2, param_grid = param_grid,
                           cv = 3, n_jobs = -1, verbose = 2)
