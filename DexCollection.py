@@ -198,7 +198,18 @@ with ((streamlit.form("input_form"))):
                 #rf2 = RandomForestClassifier(bootstrap=True, max_depth=90, max_features='sqrt', min_samples_leaf=2,
                 #                             min_samples_split=3, n_estimators=400)
                 rf2.fit(X_train2, y_train2)
-                resultStr = resultStr + " " + str(rf2.predict(tokenInfo))
+                clarifyingResult = str(rf2.predict(tokenInfo))
+                resultStr = resultStr + " " + clarifyingResult
+
+                if clarifyingResult == '[11]':
+                    data_frameR = pd.read_csv("rug_data.csv")
+                    data_frameR['result'] = data_frameR['result'].map({'R25': 25, 'R': 1, 'R2': 2})
+                    XR = data_frameR.drop('result', axis=1)
+                    yR = data_frameR['result']
+                    X_trainR, X_testR, y_trainR, y_testR = train_test_split(XR, yR, test_size=0.2)
+                    rfR = RandomForestClassifier(random_state=42)
+                    rfR.fit(X_trainR, y_trainR)
+                    resultStr = resultStr + " " + str(rfR.predict(tokenInfo))
                 streamlit.subheader(resultStr)
 
                 #two more iterations if the first one came back success
@@ -210,6 +221,10 @@ with ((streamlit.form("input_form"))):
                     X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
                     rf2.fit(X_train2, y_train2)
                     resultStr = resultStr + " " + str(rf2.predict(tokenInfo))
+                    if clarifyingResult == '[11]':
+                        X_trainR, X_testR, y_trainR, y_testR = train_test_split(XR, yR, test_size=0.2)
+                        rfR.fit(X_trainR, y_trainR)
+                        resultStr = resultStr + " " + str(rfR.predict(tokenInfo))
                     streamlit.subheader(resultStr)
 
             streamlit.subheader(command)
