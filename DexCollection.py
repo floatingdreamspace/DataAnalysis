@@ -149,12 +149,14 @@ with ((streamlit.form("input_form"))):
             MCToBuys = float(marketCap) / float(buysH1)
             poolsToLiquidity = float(pools) / float(liquidity)
             buysToVol = float(buysH1) / float(volH1)
+            priceToVol = float(priceH1) / float(volH1)
+            priceToVol5M = float(priceM5) / float(volM5)
             tokenInfo = []
             tokenInfo.append(
                 [buysM5, buysH1, sellsM5, sellsH1, volM5, volH1, priceM5, priceH1, liquidity, marketCap, paidProfile,
                  paidAd, websites, socials, boosts, pools, buysToSells, volToLiquidity,
-                 volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol, score, highHolder,
-                 lowLP, mutable, unlockedLP, singleHolder, highOwnership])
+                 volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol, priceToVol, priceToVol5M,
+                 score, highHolder, lowLP, mutable, unlockedLP, singleHolder, highOwnership])
 
             resultStr = ""
             regressionr = ""

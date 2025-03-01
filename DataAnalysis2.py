@@ -12,7 +12,7 @@ from sklearn.model_selection import RandomizedSearchCV, train_test_split, GridSe
 from imblearn.ensemble import BalancedRandomForestClassifier
 
 # Connecting to the database
-connection = sqlite3.connect("DB.db")
+connection = sqlite3.connect("DB2.db")
 cursor = connection.cursor()
 
 DBTokens = []  # Array of city data retrieved from the database.
@@ -24,7 +24,8 @@ DBTokens = cursor.fetchall()
 tokens.append(["buysM5", "buysH1", "sellsM5", "sellsH1", "volM5", "volH1", "priceM5", "priceH1", "liquidity", "marketCap",
                  "paidProfile", "paidAd", "websites", "socials", "boosts", "pools", "buysToSells",
                  "volToLiquidity", "volToMC", "liquidityToMC", "liquidityToBuys", "MCToBuys", "poolsToLiquidity", "buysToVol",
-                 "score", "highHolder", "lowLP", "mutable", "unlockedLP", "singleHolder", "highOwnership", "result"])
+                 "priceToVol", "priceToVol5M", "score", "highHolder", "lowLP", "mutable", "unlockedLP", "singleHolder", "highOwnership", "result"])
+
 for row in DBTokens:
     buysToSells = float(row[3]) / float(row[5])
     volToLiquidity = float(row[7]) / float(row[10])
@@ -34,16 +35,19 @@ for row in DBTokens:
     MCToBuys = float(row[11]) / float(row[3])
     poolsToLiquidity = float(row[17]) / float(row[10])
     buysToVol = float(row[3]) / float(row[7])
+    priceToVol = float(row[9]) / float(row[7])
+    priceToVol5M = float(row[8]) / float(row[6])
     tokens.append([row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13]
                         , row[14], row[15], row[16], row[17], buysToSells,
                         volToLiquidity, volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol,
+                        priceToVol, priceToVol5M,
                         row[20], row[21], row[22], row[23], row[24], row[25], row[26], row[27]])
-#with open('new_data.csv', 'w', newline='') as csvfile:
+#with open('new_data2.csv', 'w', newline='') as csvfile:
 #    writer = csv.writer(csvfile)
 #    writer.writerows(tokens)
 
 resultStr2 = ""
-data_frame2 = pd.read_csv("new_data.csv")
+data_frame2 = pd.read_csv("new_data2.csv")
 data_frame2['result'] = data_frame2['result'].map({'Failure': 0, 'Success': 1, 'RSuccess': 11, 'RFailure': -1, '2x': 2
                                                  , '3x': 3, '4x': 4, '10x': 10})
 X2 = data_frame2.drop('result', axis=1)
@@ -51,13 +55,13 @@ y2 = data_frame2['result']
 X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
 
 #for clarifying model
-#rf2 = RandomForestClassifier(bootstrap=True, max_depth=90, max_features='sqrt', min_samples_leaf=2, min_samples_split=3, n_estimators=400)
+rf2 = RandomForestClassifier(bootstrap=True, max_depth=90, max_features='sqrt', min_samples_leaf=2, min_samples_split=3, n_estimators=400)
 
 #for original model
 #rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=10, n_estimators=400)
 #rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features=10, min_samples_leaf=6, min_samples_split=2, n_estimators=400)
 #rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features='sqrt', min_samples_leaf=1, min_samples_split=5, n_estimators=600)
-rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features='sqrt', min_samples_leaf=2, min_samples_split=2, n_estimators=600)
+#rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features='sqrt', min_samples_leaf=2, min_samples_split=2, n_estimators=600)
 
 #for model tuning
 #rf2 = RandomForestClassifier(random_state=42)
