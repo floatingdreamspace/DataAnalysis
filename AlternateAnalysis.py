@@ -6,6 +6,8 @@ import numpy
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
+from sklearn import svm
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
 from sklearn.model_selection import RandomizedSearchCV, train_test_split, GridSearchCV
@@ -55,54 +57,39 @@ y2 = data_frame2['result']
 X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
 
 #for clarifying model
-#rf2 = RandomForestClassifier(bootstrap=True, max_depth=90, max_features='sqrt', min_samples_leaf=2, min_samples_split=3, n_estimators=400)
-rf2 = RandomForestClassifier(bootstrap=True, max_depth=90, max_features='sqrt', min_samples_leaf=2, min_samples_split=80, n_estimators=400)
-#rf2 = RandomForestClassifier(bootstrap=True, max_depth=20, max_features=15, min_samples_leaf=4, min_samples_split=80, n_estimators=1400)
+rf2 = GradientBoostingClassifier(max_features='sqrt', max_depth=100, min_samples_leaf=4, min_samples_split=120)
 
 #for original model
-#rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=10, n_estimators=400)
-#rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=110, n_estimators=400)
-#rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features=10, min_samples_leaf=6, min_samples_split=2, n_estimators=400)
-#rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features='sqrt', min_samples_leaf=1, min_samples_split=5, n_estimators=600)
-#rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features='sqrt', min_samples_leaf=2, min_samples_split=2, n_estimators=600)
+#rf2 = GradientBoostingClassifier(max_features='sqrt', max_depth=100, min_samples_leaf=4, min_samples_split=100)
 
 #for model tuning
-#rf2 = RandomForestClassifier(random_state=42)
+#rf2 = GradientBoostingClassifier()
+#rf2 = svm.SVC(kernel='rbf')
 
 rf2.fit(X_train2, y_train2)
 
-# Number of trees in random forest
-n_estimators = [int(x) for x in numpy.linspace(start = 200, stop = 2000, num = 10)]
 # Number of features to consider at every split
-max_features = ['auto', 'sqrt']
+max_features = [8, 10, 12, 'sqrt']
 # Maximum number of levels in tree
 max_depth = [int(x) for x in numpy.linspace(10, 110, num = 11)]
 max_depth.append(None)
 # Minimum number of samples required to split a node
-min_samples_split = [2, 5, 10]
+min_samples_split = [10, 50, 70, 100, 120]
 # Minimum number of samples required at each leaf node
 min_samples_leaf = [1, 2, 4]
-# Method of selecting samples for training each tree
-bootstrap = [True, False]
 # Create the random grid
-random_grid = {'n_estimators': n_estimators,
-               'max_features': max_features,
+random_grid = {'max_features': max_features,
                'max_depth': max_depth,
                'min_samples_split': min_samples_split,
-               'min_samples_leaf': min_samples_leaf,
-               'bootstrap': bootstrap}
+               'min_samples_leaf': min_samples_leaf}
 rf_random = RandomizedSearchCV(estimator = rf2, param_distributions = random_grid, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
 #rf_random.fit(X_train2, y_train2)
 #print(rf_random.best_params_)
 
-param_grid = {
-    'bootstrap': [True],
-    'max_depth': [10, 20, 50, None],
-    'max_features': [10, 15, 'sqrt'],
-    'min_samples_leaf': [1, 2, 4, 6],
-    'min_samples_split': [2, 3, 5],
-    'n_estimators': [400, 500, 600, 300]
-}
+param_grid = {'max_features': ['sqrt'],
+               'max_depth': [60, 80, 100],
+               'min_samples_split': [80, 100, 110, 120],
+               'min_samples_leaf': [3, 4, 5]}
 grid_search = GridSearchCV(estimator = rf2, param_grid = param_grid,
                           cv = 3, n_jobs = -1, verbose = 2)
 #grid_search.fit(X_train2, y_train2)
