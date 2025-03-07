@@ -5,8 +5,8 @@ import csv
 import numpy
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn import svm
+from sklearn.naive_bayes import GaussianNB
+from sklearn import neighbors
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
@@ -57,14 +57,18 @@ y2 = data_frame2['result']
 X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
 
 #for clarifying model
-rf2 = GradientBoostingClassifier(max_features='sqrt', max_depth=100, min_samples_leaf=4, min_samples_split=120)
+#rf2 = GradientBoostingClassifier(max_features='sqrt', max_depth=100, min_samples_leaf=4, min_samples_split=120)
+#rf2 = neighbors.KNeighborsClassifier(n_neighbors=12)
 
 #for original model
 #rf2 = GradientBoostingClassifier(max_features='sqrt', max_depth=100, min_samples_leaf=4, min_samples_split=100)
+#rf2 = neighbors.KNeighborsClassifier(n_neighbors=6)
 
 #for model tuning
 #rf2 = GradientBoostingClassifier()
 #rf2 = svm.SVC(kernel='rbf')
+#rf2 = neighbors.KNeighborsClassifier(n_neighbors=12)
+rf2 = GaussianNB()
 
 rf2.fit(X_train2, y_train2)
 
@@ -96,6 +100,27 @@ grid_search = GridSearchCV(estimator = rf2, param_grid = param_grid,
 #print(grid_search.best_params_)
 
 y_pred2 = rf2.predict(X_test2)
+correct1s = 0
+correct0s = 0
+incorrect1s = 0
+incorrect0s = 0
 accuracy = accuracy_score(y_test2, y_pred2)
+'''print(y_test2[0])
+for i in y_test2:
+    value = int(y_test2[i])
+    if value == 0:
+        if value == 0:
+            correct0s = correct0s + 1
+        else:
+            incorrect0s = incorrect0s + 1
+    elif value == 1:
+        if value == 0:
+            correct1s = correct1s + 1
+        else:
+            incorrect1s = incorrect1s + 1'''
 print(y_test2, y_pred2)
 print("Accuracy:", accuracy)
+'''print("Correct 1s: " + correct1s)
+print("Incorrect 1s: " + incorrect1s)
+print("Correct 0s: " + correct0s)
+print("Incorrect 0s: " + incorrect0s)'''
