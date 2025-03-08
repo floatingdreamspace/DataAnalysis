@@ -14,7 +14,7 @@ from sklearn.model_selection import RandomizedSearchCV, train_test_split, GridSe
 from imblearn.ensemble import BalancedRandomForestClassifier
 
 # Connecting to the database
-connection = sqlite3.connect("DB2.db")
+connection = sqlite3.connect("DB.db")
 cursor = connection.cursor()
 
 DBTokens = []  # Array of city data retrieved from the database.
@@ -44,12 +44,12 @@ for row in DBTokens:
                         volToLiquidity, volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol,
                         priceToVol, priceToVol5M,
                         row[20], row[21], row[22], row[23], row[24], row[25], row[26], row[27]])
-#with open('new_data2.csv', 'w', newline='') as csvfile:
+#with open('new_data.csv', 'w', newline='') as csvfile:
 #    writer = csv.writer(csvfile)
 #    writer.writerows(tokens)
 
 resultStr2 = ""
-data_frame2 = pd.read_csv("new_data2.csv")
+data_frame2 = pd.read_csv("new_data.csv")
 data_frame2['result'] = data_frame2['result'].map({'Failure': 0, 'Success': 1, 'RSuccess': 11, 'RFailure': -1, '2x': 2
                                                  , '3x': 3, '4x': 4, '10x': 10})
 X2 = data_frame2.drop('result', axis=1)
@@ -68,7 +68,7 @@ X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
 #rf2 = GradientBoostingClassifier()
 #rf2 = svm.SVC(kernel='rbf')
 #rf2 = neighbors.KNeighborsClassifier(n_neighbors=12)
-rf2 = GaussianNB()
+#rf2 = GaussianNB(var_smoothing=0.00000001)
 
 rf2.fit(X_train2, y_train2)
 

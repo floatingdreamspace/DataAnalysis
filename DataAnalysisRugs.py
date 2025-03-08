@@ -10,6 +10,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
 from sklearn.model_selection import RandomizedSearchCV, train_test_split, GridSearchCV
 from imblearn.ensemble import BalancedRandomForestClassifier
+from sklearn import neighbors
+from sklearn.ensemble import GradientBoostingClassifier
 
 # Connecting to the database
 connection = sqlite3.connect("DBR.db")
@@ -53,10 +55,14 @@ y2 = data_frame2['result']
 X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
 
 #for model tuning
-rf2 = RandomForestClassifier(random_state=42)
+#rf2 = RandomForestClassifier(random_state=42)
+#rf2 = GradientBoostingClassifier()
+rf2 = neighbors.KNeighborsClassifier(n_neighbors=10)
 
 #for model tests
 #rf2 = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=30, max_features='sqrt', min_samples_leaf=1, min_samples_split=2, n_estimators=200)
+#rf2 = GradientBoostingClassifier()
+#rf2 = neighbors.KNeighborsClassifier(n_neighbors=10)
 
 rf2.fit(X_train2, y_train2)
 
