@@ -12,6 +12,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
 from sklearn.model_selection import RandomizedSearchCV, train_test_split
 from imblearn.ensemble import BalancedRandomForestClassifier
+from sklearn import neighbors
+from sklearn.ensemble import GradientBoostingClassifier
 
 page_title = "Collecting Dex Data"
 page_icon = ":seedling:"
@@ -158,77 +160,61 @@ with ((streamlit.form("input_form"))):
                  volToMC, liquidityToMC, liquidityToBuys, MCToBuys, poolsToLiquidity, buysToVol, priceToVol, priceToVol5M,
                  score, highHolder, lowLP, mutable, unlockedLP, singleHolder, highOwnership])
 
-            resultStr = ""
-            regressionr = ""
-            for i in range(0, 1):
-                data_frame = pd.read_csv("new_data.csv")
-                data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
-                X = data_frame.drop('result', axis=1)
-                y = data_frame['result']
-                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-                #scaler = StandardScaler()
-                #X_train_regression = scaler.fit_transform(X_train)
-                #X_test = scaler.transform(X_test)
-                #rmodel = LogisticRegression(penalty='l1', C=numpy.float64(0.0001), solver='liblinear')
-                #rmodel = LogisticRegression()
-                #rmodel.fit(X_train_regression, y_train)
-                #y_pred = rmodel.predict(X_test)
-                #accuracy = accuracy_score(y_test, y_pred)
-                #streamlit.subheader("Accuracy: " + str(accuracy * 100))
-                rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt', min_samples_leaf=4, min_samples_split=110, n_estimators=400)
-                #rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=10, max_features='sqrt',
-                #                             min_samples_leaf=2, min_samples_split=2, n_estimators=600)
-                #rf = BalancedRandomForestClassifier(n_estimators=10)
-                rf.fit(X_train, y_train)
-                #rf.fit(X, y)
-                #regressionr = regressionr + str(rmodel.predict(tokenInfo))
-                resultStr = resultStr + str(rf.predict(tokenInfo))
-            #streamlit.subheader(resultStr)
-            #streamlit.subheader(regressionr)
+            data_frame = pd.read_csv("new_data.csv")
+            data_frame['result'] = data_frame['result'].map({'Failure': 0, 'Success': 1})
+            X = data_frame.drop('result', axis=1)
+            y = data_frame['result']
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.01)
+            base_rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=70, max_features='sqrt',
+                                                 min_samples_leaf=4, min_samples_split=110, n_estimators=400)
+            base_rf.fit(X_train, y_train)
+            base_gb = GradientBoostingClassifier(max_features='sqrt', max_depth=100, min_samples_leaf=4,
+                                                     min_samples_split=100)
+            base_gb.fit(X_train, y_train)
+            base_nn = neighbors.KNeighborsClassifier(n_neighbors=6)
+            base_nn.fit(X_train, y_train)
+            rf_resultStr = str(base_rf.predict(tokenInfo))
+            gb_resultStr = str(base_gb.predict(tokenInfo))
+            nn_resultStr = str(base_nn.predict(tokenInfo))
 
-            if resultStr == "[1]":
-                resultStr2 = ""
-                data_frame2 = pd.read_csv("new_data2.csv")
-                data_frame2['result'] = data_frame2['result'].map(
-                    {'Failure': 0, 'Success': 1, 'RSuccess': 11, 'RFailure': -1, '2x': 2
-                        , '3x': 3, '4x': 4, '5x': 5, '6x': 6, '7x': 7
-                        , '8x': 8, '9x': 9, '10x': 10})
-                X2 = data_frame2.drop('result', axis=1)
-                y2 = data_frame2['result']
-                X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
-                #rf2 = RandomForestClassifier(bootstrap=True, max_depth=20, max_features=15, min_samples_leaf=4, min_samples_split=80, n_estimators=1400)
-                rf2 = RandomForestClassifier(bootstrap=True, max_depth=90, max_features='sqrt', min_samples_leaf=2,
-                                             min_samples_split=80, n_estimators=400)
-                rf2.fit(X_train2, y_train2)
-                clarifyingResult = str(rf2.predict(tokenInfo))
-                resultStr = resultStr + " " + clarifyingResult
+            data_frame2 = pd.read_csv("new_data2.csv")
+            data_frame2['result'] = data_frame2['result'].map(
+                {'Failure': 0, 'Success': 1, 'RSuccess': 11, 'RFailure': -1, '2x': 2
+                    , '3x': 3, '4x': 4, '10x': 10})
+            X2 = data_frame2.drop('result', axis=1)
+            y2 = data_frame2['result']
+            X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.01)
+            winners_rf = RandomForestClassifier(bootstrap=True, max_depth=90, max_features='sqrt', min_samples_leaf=2,
+                                                min_samples_split=80, n_estimators=400)
+            winners_rf.fit(X_train2, y_train2)
+            winners_gb = GradientBoostingClassifier(max_features='sqrt', max_depth=100, min_samples_leaf=4,
+                                                    min_samples_split=120)
+            winners_gb.fit(X_train2, y_train2)
+            winners_nn = neighbors.KNeighborsClassifier(n_neighbors=12)
+            winners_nn.fit(X_train2, y_train2)
+            rf_resultStr = rf_resultStr + str(winners_rf.predict(tokenInfo))
+            gb_resultStr = gb_resultStr + str(winners_gb.predict(tokenInfo))
+            nn_resultStr = nn_resultStr + str(winners_nn.predict(tokenInfo))
 
-                if clarifyingResult == '[11]':
-                    data_frameR = pd.read_csv("rug_data.csv")
-                    data_frameR['result'] = data_frameR['result'].map({'R25': 25, 'R': 1, 'R2': 2})
-                    XR = data_frameR.drop('result', axis=1)
-                    yR = data_frameR['result']
-                    X_trainR, X_testR, y_trainR, y_testR = train_test_split(XR, yR, test_size=0.2)
-                    rfR = RandomForestClassifier(random_state=42)
-                    rfR.fit(X_trainR, y_trainR)
-                    resultStr = resultStr + " " + str(rfR.predict(tokenInfo))
-                streamlit.subheader(resultStr)
+            data_frameR = pd.read_csv("rug_data.csv")
+            data_frameR['result'] = data_frameR['result'].map({'R25': 25, 'R': 1, 'R2': 2})
+            XR = data_frameR.drop('result', axis=1)
+            yR = data_frameR['result']
+            X_trainR, X_testR, y_trainR, y_testR = train_test_split(XR, yR, test_size=0.01)
+            RWins_rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=30, max_features='sqrt',
+                                              min_samples_leaf=1, min_samples_split=2, n_estimators=200)
+            RWins_rf.fit(X_trainR, y_trainR)
+            RWins_gb = GradientBoostingClassifier()
+            RWins_gb.fit(X_trainR, y_trainR)
+            RWins_nn = neighbors.KNeighborsClassifier(n_neighbors=10)
+            RWins_nn.fit(X_trainR, y_trainR)
+            rf_resultStr = rf_resultStr + str(RWins_rf.predict(tokenInfo))
+            gb_resultStr = gb_resultStr + str(RWins_gb.predict(tokenInfo))
+            nn_resultStr = nn_resultStr + str(RWins_nn.predict(tokenInfo))
 
-                #two more iterations if the first one came back success
-                for j in range(0, 2):
-                    resultStr = ""
-                    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-                    rf.fit(X_train, y_train)
-                    resultStr = resultStr + str(rf.predict(tokenInfo))
-                    X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
-                    rf2.fit(X_train2, y_train2)
-                    resultStr = resultStr + " " + str(rf2.predict(tokenInfo))
-                    if clarifyingResult == '[11]':
-                        X_trainR, X_testR, y_trainR, y_testR = train_test_split(XR, yR, test_size=0.2)
-                        rfR.fit(X_trainR, y_trainR)
-                        resultStr = resultStr + " " + str(rfR.predict(tokenInfo))
-                    streamlit.subheader(resultStr)
-
+            streamlit.subheader(rf_resultStr)
+            streamlit.subheader(gb_resultStr)
+            streamlit.subheader(nn_resultStr)
             streamlit.subheader(command)
 
 connection.close()
