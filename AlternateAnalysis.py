@@ -63,12 +63,13 @@ X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2)
 #for original model
 #rf2 = GradientBoostingClassifier(max_features='sqrt', max_depth=100, min_samples_leaf=4, min_samples_split=100)
 #rf2 = neighbors.KNeighborsClassifier(n_neighbors=6)
+rf2 = GaussianNB(var_smoothing=0.0012328467394420659)
 
 #for model tuning
 #rf2 = GradientBoostingClassifier()
 #rf2 = svm.SVC(kernel='rbf')
 #rf2 = neighbors.KNeighborsClassifier(n_neighbors=12)
-#rf2 = GaussianNB(var_smoothing=0.00000001)
+#rf2 = GaussianNB()
 
 rf2.fit(X_train2, y_train2)
 
@@ -98,6 +99,12 @@ grid_search = GridSearchCV(estimator = rf2, param_grid = param_grid,
                           cv = 3, n_jobs = -1, verbose = 2)
 #grid_search.fit(X_train2, y_train2)
 #print(grid_search.best_params_)
+gaussian_grid = {'var_smoothing': numpy.logspace(0,-9, num=100)
+}
+gaussian_search = GridSearchCV(estimator = rf2, param_grid = gaussian_grid,
+                          cv = 10, n_jobs = -1, verbose = 2)
+#gaussian_search.fit(X_train2, y_train2)
+#print(gaussian_search.best_params_)
 
 y_pred2 = rf2.predict(X_test2)
 correct1s = 0
