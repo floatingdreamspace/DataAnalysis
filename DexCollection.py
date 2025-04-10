@@ -14,6 +14,7 @@ from sklearn.model_selection import RandomizedSearchCV, train_test_split
 from imblearn.ensemble import BalancedRandomForestClassifier
 from sklearn import neighbors
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.naive_bayes import GaussianNB
 
 page_title = "Collecting Dex Data"
 page_icon = ":seedling:"
@@ -26,9 +27,7 @@ cursor = connection.cursor()
 streamlit.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
 
 streamlit.header(f"Welcome to SproutCast! Your Gardening Companion")
-streamlit.subheader(f"Tell us about your garden! Please enter your information below. SproutCast will use your inputs" +
-                    " along with local weather data to predict how much water you should be giving your garden " +
-                    "using machine learning!")
+streamlit.subheader(f"Tell us about your garden! Please enter your information below.")
 with ((streamlit.form("input_form"))):
     pair = streamlit.text_input("Enter your plant info: ", key="pairId")
     submitted = streamlit.form_submit_button("Submit Form")
@@ -173,9 +172,12 @@ with ((streamlit.form("input_form"))):
             base_gb.fit(X_train, y_train)
             base_nn = neighbors.KNeighborsClassifier(n_neighbors=6)
             base_nn.fit(X_train, y_train)
+            base_nb = GaussianNB(var_smoothing=0.0012328467394420659)
+            base_nb.fit(X_train, y_train)
             rf_resultStr = str(base_rf.predict(tokenInfo))
             gb_resultStr = str(base_gb.predict(tokenInfo))
             nn_resultStr = str(base_nn.predict(tokenInfo))
+            nb_resultStr = str(base_nb.predict(tokenInfo))
 
             data_frame2 = pd.read_csv("new_data2.csv")
             data_frame2['result'] = data_frame2['result'].map(
@@ -196,7 +198,7 @@ with ((streamlit.form("input_form"))):
             gb_resultStr = gb_resultStr + str(winners_gb.predict(tokenInfo))
             nn_resultStr = nn_resultStr + str(winners_nn.predict(tokenInfo))
 
-            data_frameR = pd.read_csv("rug_data.csv")
+            '''data_frameR = pd.read_csv("rug_data.csv")
             data_frameR['result'] = data_frameR['result'].map({'R25': 25, 'R': 1, 'R2': 2})
             XR = data_frameR.drop('result', axis=1)
             yR = data_frameR['result']
@@ -210,11 +212,12 @@ with ((streamlit.form("input_form"))):
             RWins_nn.fit(X_trainR, y_trainR)
             rf_resultStr = rf_resultStr + str(RWins_rf.predict(tokenInfo))
             gb_resultStr = gb_resultStr + str(RWins_gb.predict(tokenInfo))
-            nn_resultStr = nn_resultStr + str(RWins_nn.predict(tokenInfo))
+            nn_resultStr = nn_resultStr + str(RWins_nn.predict(tokenInfo))'''
 
             streamlit.subheader(rf_resultStr)
             streamlit.subheader(gb_resultStr)
             streamlit.subheader(nn_resultStr)
+            streamlit.subheader(nb_resultStr)
             streamlit.subheader(command)
 
 connection.close()
