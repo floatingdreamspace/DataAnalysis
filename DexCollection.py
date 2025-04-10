@@ -198,21 +198,21 @@ with ((streamlit.form("input_form"))):
             gb_resultStr = gb_resultStr + str(winners_gb.predict(tokenInfo))
             nn_resultStr = nn_resultStr + str(winners_nn.predict(tokenInfo))
 
-            '''data_frameR = pd.read_csv("rug_data.csv")
-            data_frameR['result'] = data_frameR['result'].map({'R25': 25, 'R': 1, 'R2': 2})
-            XR = data_frameR.drop('result', axis=1)
-            yR = data_frameR['result']
-            X_trainR, X_testR, y_trainR, y_testR = train_test_split(XR, yR, test_size=0.01)
-            RWins_rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=30, max_features='sqrt',
-                                              min_samples_leaf=1, min_samples_split=2, n_estimators=200)
-            RWins_rf.fit(X_trainR, y_trainR)
-            RWins_gb = GradientBoostingClassifier()
-            RWins_gb.fit(X_trainR, y_trainR)
-            RWins_nn = neighbors.KNeighborsClassifier(n_neighbors=10)
-            RWins_nn.fit(X_trainR, y_trainR)
-            rf_resultStr = rf_resultStr + str(RWins_rf.predict(tokenInfo))
-            gb_resultStr = gb_resultStr + str(RWins_gb.predict(tokenInfo))
-            nn_resultStr = nn_resultStr + str(RWins_nn.predict(tokenInfo))'''
+            #data_frameR = pd.read_csv("rug_data.csv")
+            #data_frameR['result'] = data_frameR['result'].map({'R25': 25, 'R': 1, 'R2': 2})
+            #XR = data_frameR.drop('result', axis=1)
+            #yR = data_frameR['result']
+            #X_trainR, X_testR, y_trainR, y_testR = train_test_split(XR, yR, test_size=0.01)
+            #RWins_rf = RandomForestClassifier(random_state=42, bootstrap=True, max_depth=30, max_features='sqrt',
+            #                                  min_samples_leaf=1, min_samples_split=2, n_estimators=200)
+            #RWins_rf.fit(X_trainR, y_trainR)
+            #RWins_gb = GradientBoostingClassifier()
+            #RWins_gb.fit(X_trainR, y_trainR)
+            #RWins_nn = neighbors.KNeighborsClassifier(n_neighbors=10)
+            #RWins_nn.fit(X_trainR, y_trainR)
+            #rf_resultStr = rf_resultStr + str(RWins_rf.predict(tokenInfo))
+            #gb_resultStr = gb_resultStr + str(RWins_gb.predict(tokenInfo))
+            #nn_resultStr = nn_resultStr + str(RWins_nn.predict(tokenInfo))
 
             streamlit.subheader(rf_resultStr)
             streamlit.subheader(gb_resultStr)
