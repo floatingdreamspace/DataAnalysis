@@ -212,7 +212,7 @@ with ((streamlit.form("input_form"))):
             #RWins_nn.fit(X_trainR, y_trainR)
             #rf_resultStr = rf_resultStr + str(RWins_rf.predict(tokenInfo))
             #gb_resultStr = gb_resultStr + str(RWins_gb.predict(tokenInfo))
-            #nn_resultStr = nn_resultStr + str(RWins_nn.predict(tokenInfo))
+            #nn_resultStr = nn_resultStr + str(RWins_nn.predict(tokenInfo))f
 
             streamlit.subheader(rf_resultStr)
             streamlit.subheader(gb_resultStr)
